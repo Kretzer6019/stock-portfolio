@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import axios from 'axios';
 
 export default defineComponent({
   data() {
@@ -8,13 +7,15 @@ export default defineComponent({
     }
   },
   methods: {
-    async getData() {
-      try {
-          const response = await axios.get('http://localhost:8080/');
-          console.log(response.data);
-      } catch (error) {
-          console.error(error);
-      }
+    getData() {
+      axios
+        .get("http://localhost:8080/")
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   created() {
