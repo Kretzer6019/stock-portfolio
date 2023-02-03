@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export default defineComponent({
   data() {
@@ -10,10 +11,10 @@ export default defineComponent({
     getData() {
       axios
         .get("http://localhost:8080/")
-        .then((response) => {
+        .then((response: AxiosResponse) => {
           console.log(response.data)
         })
-        .catch((error) => {
+        .catch((error: AxiosError) => {
           console.log(error)
         })
     }

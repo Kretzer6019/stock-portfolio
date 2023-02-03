@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
 
+	// Set cors policy
 	r.Use(corsMiddleware())
 
 	// Add your routes here
@@ -18,19 +20,10 @@ func main() {
 }
 
 func corsMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Set the appropriate headers to allow cross-origin requests
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
-		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
-		// Continue with the request if it's not a preflight request
-		if c.Request.Method != "OPTIONS" {
-			c.Next()
-		} else {
-			c.AbortWithStatus(204)
-		}
-	}
+	return cors.New(config)
 }

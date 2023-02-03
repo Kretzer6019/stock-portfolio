@@ -1,5 +1,5 @@
 import './style.css'
-import './pages/common/common.js'
+import { createApp } from 'vue'
 
 import App from './App.vue'
 
