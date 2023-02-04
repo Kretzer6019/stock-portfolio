@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:18-alpine
 
 # set the working direction
 WORKDIR /app/frontend
@@ -7,16 +7,14 @@ WORKDIR /app/frontend
 COPY package.json ./
 COPY package-lock.json ./
 
-# Fix permissions for packages
-# RUN npm config set unsafe-perm true
-
-RUN npm install
-RUN npm install -g serve
+# Download packages
+RUN yarn install
 
 # Bundle app source
 COPY . ./
 
-RUN chown -R node:node /app/frontend/node_modules
+# Run build
+RUN yarn build
 
 # start app
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "dev"]
