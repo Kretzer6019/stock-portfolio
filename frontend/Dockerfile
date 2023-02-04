@@ -1,16 +1,22 @@
-# build step
-FROM node:19-alpine3.16
-# make the 'app' folder the current working directory
+FROM node:lts-alpine
+
+# set the working direction
 WORKDIR /app/frontend
 
-# copy both 'package.json' and 'package-lock.json' (if available)
-COPY package*.json ./
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
 
-# install project dependencies
-RUN yarn install
+# Fix permissions for packages
+# RUN npm config set unsafe-perm true
 
-# copy project files and folders to the current working directory (i.e. 'app' folder)
-COPY . .
+RUN npm install
+RUN npm install -g serve
 
-# build app for production with minification
-RUN yarn build
+# Bundle app source
+COPY . ./
+
+RUN chown -R node:node /app/frontend/node_modules
+
+# start app
+CMD ["npm", "run", "dev"]

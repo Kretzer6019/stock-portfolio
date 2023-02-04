@@ -1,5 +1,5 @@
 FROM golang:1.19-alpine
 
-WORKDIR /app/backend
+WORKDIR /app
 COPY . .
 RUN go mod download
