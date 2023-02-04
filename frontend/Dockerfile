@@ -1,5 +1,5 @@
 # build step
-FROM node:19-alpine3.16 as build-stage
+FROM node:19-alpine3.16
 # make the 'app' folder the current working directory
 WORKDIR /app/frontend
 
@@ -14,9 +14,3 @@ COPY . .
 
 # build app for production with minification
 RUN yarn build
-
-# production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
-EXPOSE 8000
-CMD ["nginx", "-g", "daemon off;"]
