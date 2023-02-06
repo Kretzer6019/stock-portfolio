@@ -142,7 +142,7 @@ export default defineComponent({
   methods: {
     getData() {
       axios
-        .get("http://localhost:8080")
+        .get("http://localhost:8080/")
         .then((response: AxiosResponse) => {
           console.log(response.data)
         })
