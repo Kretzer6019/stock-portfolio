@@ -11,6 +11,6 @@ services:
     build: ./backend
     volumes: 
       # Backend source
-      - ./backend:/app/backend
+      - ./backend:/app
     ports:
       - 8080:8080
