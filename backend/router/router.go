@@ -1,12 +1,16 @@
 package router
 
 import (
+	"dependencies/db"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Generate() *gin.Engine {
 	r := gin.Default()
+	DB := db.Init()
+	r.Use(db.DatabaseMiddleware(DB))
 	r.Use(corsMiddleware())
 	return configRouter(r)
 }

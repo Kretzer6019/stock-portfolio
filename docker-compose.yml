@@ -1,16 +1,47 @@
 version: '3'
 services:
   frontend:
+    container_name: web
     build: ./frontend
     volumes:
       # Frontend source files
       - ./frontend/src:/app/frontend/src
+      # Vite config
+      - ./frontend/vite.config.ts:/app/frontend?vite.config.ts
+    depends_on:
+      - backend
     ports:
       - 8000:8000
   backend:
+    container_name: app
     build: ./backend
     volumes: 
       # Backend source
       - ./backend:/app
+    depends_on:
+     - db
     ports:
       - 8080:8080
+  db:
+    container_name: db
+    image: postgres
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test_db
+    depends_on: 
+      - pgadmin
+    ports:
+      - "5432:5432"
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
