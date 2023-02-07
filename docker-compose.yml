@@ -1,15 +1,19 @@
 version: '3'
 services:
   frontend:
+    container_name: web
     build: ./frontend
     volumes:
       # Frontend source files
       - ./frontend/src:/app/frontend/src
+      # Vite config
+      - ./frontend/vite.config.ts:/app/frontend?vite.config.ts
     depends_on:
       - backend
     ports:
       - 8000:8000
   backend:
+    container_name: app
     build: ./backend
     volumes: 
       # Backend source
@@ -19,7 +23,7 @@ services:
     ports:
       - 8080:8080
   db:
-    container_name: pg_container
+    container_name: db
     image: postgres
     volumes:
       - ./database:/var/lib/postgresql/data
@@ -33,7 +37,7 @@ services:
     ports:
       - "5432:5432"
   pgadmin:
-    container_name: pgadmin4_container
+    container_name: pgadmin4
     image: dpage/pgadmin4
     restart: always
     environment:
