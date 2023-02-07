@@ -11,6 +11,6 @@ var userRoutes = []gin.RouteInfo{
 	{
 		Method:      http.MethodGet,
 		Path:        "/",
-		HandlerFunc: users.CreateUser,
+		HandlerFunc: users.GetUser,
 	},
 }
