@@ -2,16 +2,16 @@ package router
 
 import (
 	"dependencies/db"
+	"dependencies/middlewares"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Generate() *gin.Engine {
 	r := gin.Default()
 	database := db.Init()
-	r.Use(corsMiddleware())
-	r.Use(db.DatabaseMiddleware(database))
+	r.Use(middlewares.CorsMiddleware())
+	r.Use(middlewares.DatabaseMiddleware(database))
 	return configRouter(r)
 }
 
@@ -23,13 +23,4 @@ func configRouter(r *gin.Engine) *gin.Engine {
 	}
 
 	return r
-}
-
-func corsMiddleware() gin.HandlerFunc {
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:8000"}
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
-
-	return cors.New(config)
 }

@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -24,11 +23,4 @@ func Init() *gorm.DB {
 	}
 
 	return db
-}
-
-func DatabaseMiddleware(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("db", db)
-		c.Next()
-	}
 }
