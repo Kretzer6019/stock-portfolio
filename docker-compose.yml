@@ -8,8 +8,6 @@ services:
       - ./frontend/src:/app/frontend/src
       # Vite config
       - ./frontend/vite.config.ts:/app/frontend?vite.config.ts
-      # .env
-      - ./config.env:/app/config.env
     depends_on:
       - backend
     ports:
@@ -21,7 +19,7 @@ services:
       # Backend source
       - ./backend:/app/backend
       # .env
-      - ./config.env:/app/config.env
+      - ./backend/.env:/app/.env
     depends_on:
      - db
     ports:
