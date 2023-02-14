@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <router-view />
+  <div id="login">
+    <h1>hello 2</h1>
   </div>
 </template>
 
