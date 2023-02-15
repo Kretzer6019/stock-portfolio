@@ -19,3 +19,21 @@ func SelectUser(id int, db *gorm.DB) (User, error) {
 
 	return user, err
 }
+
+func SelectUserByEmail(email string, db *gorm.DB) (User, error) {
+	var user User
+	err := db.First(&user, "email = ?", email).Error
+
+	return user, err
+}
+
+func InsertUser(email string, password string, db *gorm.DB) (int, error) {
+	user := User{
+		Email:    email,
+		Password: password,
+	}
+
+	result := db.Select("email", "password").Create(&user)
+
+	return user.ID, result.Error
+}
