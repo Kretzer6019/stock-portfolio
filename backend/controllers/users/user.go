@@ -1,6 +1,7 @@
 package users
 
 import (
+	"dependencies/auth"
 	"dependencies/models/users"
 	"log"
 	"net/http"
@@ -56,6 +57,11 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+type LoginResponse struct {
+	UserID int    `json:"user_id"`
+	Token  string `json:"token"`
+}
+
 func Login(c *gin.Context) {
 	var request LoginRequest
 	c.ShouldBindJSON(&request)
@@ -76,5 +82,17 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, "Logado com Sucesso!")
+	token, err := auth.CreateToken(user.ID)
+	if err != nil {
+		log.Println("Error:", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	response := LoginResponse{
+		UserID: user.ID,
+		Token:  token,
+	}
+
+	c.JSON(http.StatusOK, response)
 }

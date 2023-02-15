@@ -19,7 +19,7 @@ func configRouter(r *gin.Engine) *gin.Engine {
 	routes := userRoutes
 
 	for _, route := range routes {
-		r.Handle(route.Method, route.Path, route.HandlerFunc)
+		r.Handle(route.Method, route.Path, middlewares.Auth(), route.HandlerFunc)
 	}
 
 	return r
