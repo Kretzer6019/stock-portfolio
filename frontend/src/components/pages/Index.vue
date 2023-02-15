@@ -10,21 +10,25 @@
           <div class="-space-y-px rounded-md shadow-sm">
             <div>
               <label for="email-address" class="sr-only">Email address</label>
-              <input id="email-address" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
+              <input id="email-address" v-model="email" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
             </div>
             <div>
               <label for="password" class="sr-only">Password</label>
-              <input id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+              <input id="password" name="password"  v-model="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
             </div>
           </div>
   
           <div class="text-center">
-            <button @click.prevent="create = true" class="text-indigo-700 underline">Crie sua conta</button>
+            <button @click.prevent="create = !create" class="text-indigo-700 underline">
+              <span v-if="!create">Crie sua conta</span>
+              <span v-else>Fazer login</span>  
+            </button>
           </div>
   
           <div>
             <button @click.prevent="submit(create)" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-              Fazer Login
+              <span v-if="!create">Fazer Login</span> 
+              <span v-else>Criar Conta</span> 
             </button>
           </div>
         </form>
@@ -36,34 +40,46 @@
   import axios, { AxiosError, AxiosResponse } from 'axios'
   import { defineComponent } from 'vue'
 
-    export default defineComponent({
-        data() {
-            return {
-              create: false,
-            }
-        },
-        methods:{
-          submit(create: Boolean){
-            if (create) {
-              axios
-                .post("http://localhost:8080/criar-conta")
-                .then((response: AxiosResponse) => {
-                  if (response.status == 200) console.log(response.data);
-                })
-                .catch((error: AxiosError) => {
-                  console.log(error);
-                })
-            } else {
-              axios
-                .post("http://localhost:8080/login")
-                .then((response: AxiosResponse) => {
-                  if (response.status == 200) console.log(response.data);
-                })
-                .catch((error: AxiosError) => {
-                  console.log(error);
-                })
-            }
-          } 
-        },
-    })
+  interface request {
+    email: string,
+    password: string,
+  }
+
+  export default defineComponent({
+      data() {
+          return {
+            create: false,
+            password: "",
+            email: "",
+          }
+      },
+      methods:{
+        submit(create: Boolean){
+          let request: request = {
+            email: this.email,
+            password: this.password,
+          }
+
+          if (create) {
+            axios
+              .post("http://localhost:8080/criar-conta", request)
+              .then((response: AxiosResponse) => {
+                if (response.status == 200) console.log(response.data);
+              })
+              .catch((error: AxiosError) => {
+                console.log(error);
+              })
+          } else {
+            axios
+              .post("http://localhost:8080/login", request)
+              .then((response: AxiosResponse) => {
+                if (response.status == 200) window.location.pathname = "/usuario";
+              })
+              .catch((error: AxiosError) => {
+                console.log(error);
+              })
+          }
+        } 
+      },
+  })
 </script>
