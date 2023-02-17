@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"dependencies/cookies"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,8 @@ import (
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("Autenticando")
+		data, err := cookies.ReadCookies(c)
+		fmt.Println(data, err)
 		c.Next()
 	}
 }

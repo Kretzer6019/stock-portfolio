@@ -2,7 +2,9 @@ package users
 
 import (
 	"dependencies/auth"
+	"dependencies/cookies"
 	"dependencies/models/users"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -89,10 +91,12 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	response := LoginResponse{
-		UserID: user.ID,
-		Token:  token,
+	err = cookies.SaveCookie(c, fmt.Sprintf("%d", user.ID), token)
+	if err != nil {
+		log.Println("Error:", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, nil)
 }
