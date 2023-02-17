@@ -1,7 +1,6 @@
 package cookies
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -23,12 +22,7 @@ func SaveCookie(c *gin.Context, ID, token string) error {
 		return err
 	}
 
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     "auth",
-		Value:    encodedData,
-		Path:     "/",
-		HttpOnly: true,
-	})
+	c.SetCookie("auth", encodedData, 3600, "/", "", false, true)
 
 	return nil
 }
