@@ -1,6 +1,7 @@
 package cookies
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,10 @@ import (
 var s *securecookie.SecureCookie
 
 func SaveCookie(c *gin.Context, ID, token string) error {
+	if os.Getenv("FRONTEND_URL") != "" {
+		c.SetSameSite(http.SameSiteNoneMode)
+	}
+
 	s = securecookie.New([]byte(os.Getenv("HASH_KEY")), []byte(os.Getenv("BLOCK_KEY")))
 
 	data := map[string]string{
@@ -17,24 +22,24 @@ func SaveCookie(c *gin.Context, ID, token string) error {
 		"token": token,
 	}
 
-	encodedData, err := s.Encode("auth", data)
+	encodedData, err := s.Encode("user", data)
 	if err != nil {
 		return err
 	}
 
-	c.SetCookie("auth", encodedData, 3600, "/", "", false, true)
+	c.SetCookie("user", encodedData, 3600, "/", "", true, true)
 
 	return nil
 }
 
 func ReadCookies(c *gin.Context) (map[string]string, error) {
-	cookie, err := c.Cookie("auth")
+	cookie, err := c.Cookie("user")
 	if err != nil {
 		return nil, err
 	}
 
 	data := make(map[string]string)
-	if err = s.Decode("auth", cookie, &data); err != nil {
+	if err = s.Decode("user", cookie, &data); err != nil {
 		return nil, err
 	}
 
