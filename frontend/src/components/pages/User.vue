@@ -96,6 +96,11 @@
   import axios, { AxiosError, AxiosResponse } from "axios";
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+
+  const api = axios.create({
+    baseURL: 'http://localhost:8080',
+    withCredentials: true,
+  });
   
   export default defineComponent({
     components: { 
@@ -133,10 +138,10 @@
     },
     methods: {
       getData() {
-        axios
-          .get("http://localhost:8080/")
+        api
+          .get("/")
           .then((response: AxiosResponse) => {
-            console.log(response.data)
+            console.log(response.data);
           })
           .catch((error: AxiosError) => {
             console.log(error)

@@ -9,8 +9,10 @@ import (
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		data, err := cookies.ReadCookies(c)
-		fmt.Println(data, err)
+		_, err := cookies.ReadCookies(c)
+		if err != nil {
+			fmt.Println("AQUII")
+		}
 		c.Next()
 	}
 }

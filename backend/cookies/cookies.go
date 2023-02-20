@@ -10,11 +10,8 @@ import (
 
 var s *securecookie.SecureCookie
 
-func SaveCookie(c *gin.Context, ID, token string) error {
-	if os.Getenv("FRONTEND_URL") != "" {
-		c.SetSameSite(http.SameSiteNoneMode)
-	}
-
+func SaveCookie(c *gin.Context, ID string, token string) error {
+	c.SetSameSite(http.SameSiteLaxMode)
 	s = securecookie.New([]byte(os.Getenv("HASH_KEY")), []byte(os.Getenv("BLOCK_KEY")))
 
 	data := map[string]string{
@@ -22,24 +19,25 @@ func SaveCookie(c *gin.Context, ID, token string) error {
 		"token": token,
 	}
 
-	encodedData, err := s.Encode("user", data)
+	encodedData, err := s.Encode("Authorization", data)
 	if err != nil {
 		return err
 	}
 
-	c.SetCookie("user", encodedData, 3600, "/", "", true, true)
+	c.SetCookie("Authorization", encodedData, 3600, "/", "localhost", true, true)
 
 	return nil
 }
 
 func ReadCookies(c *gin.Context) (map[string]string, error) {
-	cookie, err := c.Cookie("user")
+	cookie, err := c.Cookie("Authorization")
 	if err != nil {
 		return nil, err
 	}
 
 	data := make(map[string]string)
-	if err = s.Decode("user", cookie, &data); err != nil {
+	err = s.Decode("Authorization", cookie, &data)
+	if err != nil {
 		return nil, err
 	}
 

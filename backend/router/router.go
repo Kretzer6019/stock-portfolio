@@ -19,6 +19,11 @@ func configRouter(r *gin.Engine) *gin.Engine {
 	routes := userRoutes
 
 	for _, route := range routes {
+		r.Handle(route.Method, route.Path, route.HandlerFunc)
+	}
+
+	apiRoutes := apiRoutes
+	for _, route := range apiRoutes {
 		r.Handle(route.Method, route.Path, middlewares.Auth(), route.HandlerFunc)
 	}
 

@@ -14,16 +14,15 @@ import (
 )
 
 func GetUser(c *gin.Context) {
+	/* db := c.MustGet("db").(*gorm.DB)
 
-	db := c.MustGet("db").(*gorm.DB)
-
-	user, err := users.SelectUser(1, db)
+	user, err := users.SelectUser(0, db)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
-	}
+	} */
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, nil)
 }
 
 type CreteAccountRequest struct {

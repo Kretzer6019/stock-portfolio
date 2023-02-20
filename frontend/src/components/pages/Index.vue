@@ -39,6 +39,11 @@
 <script lang="ts">
   import axios, { AxiosError, AxiosResponse } from 'axios'
   import { defineComponent } from 'vue'
+  
+  const api = axios.create({
+    baseURL: 'http://localhost:8080',
+    withCredentials: true,
+  });
 
   interface request {
     email: string,
@@ -61,8 +66,8 @@
           }
 
           if (create) {
-            axios
-              .post("http://localhost:8080/criar-conta", request)
+            api
+              .post("/criar-conta", request)
               .then((response: AxiosResponse) => {
                 if (response.status == 200) console.log(response.data);
               })
@@ -70,10 +75,10 @@
                 console.log(error);
               })
           } else {
-            axios
-              .post("http://localhost:8080/login", request)
+            api
+              .post("/login", request)
               .then((response: AxiosResponse) => {
-                if (response.status == 200) window.location.pathname = "/usuario";
+                window.location.pathname = "/usuario";
               })
               .catch((error: AxiosError) => {
                 console.log(error);

@@ -4,8 +4,8 @@ import User from '../components/pages/User.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'Home',
+    path: '/login',
+    name: 'Login',
     component: Index
   },
   {
