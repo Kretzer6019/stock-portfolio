@@ -1,7 +1,6 @@
 package cookies
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +10,6 @@ import (
 var s *securecookie.SecureCookie
 
 func SaveCookie(c *gin.Context, ID string, token string) error {
-	c.SetSameSite(http.SameSiteLaxMode)
 	s = securecookie.New([]byte(os.Getenv("HASH_KEY")), []byte(os.Getenv("BLOCK_KEY")))
 
 	data := map[string]string{
