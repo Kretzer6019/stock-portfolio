@@ -1,11 +1,11 @@
 package auth
 
 import (
+	"dependencies/cookies"
 	"errors"
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -24,9 +24,12 @@ func CreateToken(userID int) (string, error) {
 }
 
 func ValidateToken(c *gin.Context) error {
-	tokenString := extractToken(c)
+	cookie, err := cookies.ReadCookies(c)
+	if err != nil {
+		return err
+	}
 
-	token, err := jwt.Parse(tokenString, returnVerificationKey)
+	token, err := jwt.Parse(cookie["token"], returnVerificationKey)
 	if err != nil {
 		return err
 	}
@@ -38,28 +41,21 @@ func ValidateToken(c *gin.Context) error {
 	return errors.New("invalid token")
 }
 
-func extractToken(c *gin.Context) string {
-	token := c.Request.Header.Get("Authorization")
-
-	if len(strings.Split(token, "")) == 2 {
-		return strings.Split(token, "")[1]
-	}
-
-	return ""
-}
-
 func returnVerificationKey(token *jwt.Token) (interface{}, error) {
 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 		return nil, errors.New("wrong method for verification key")
 	}
 
-	return os.Getenv("AUTH_JWT_SECRET_KEY"), nil
+	return []byte(os.Getenv("AUTH_JWT_SECRET_KEY")), nil
 }
 
 func ExtractUserID(c *gin.Context) (int64, error) {
-	tokenString := extractToken(c)
+	cookie, err := cookies.ReadCookies(c)
+	if err != nil {
+		return 0, err
+	}
 
-	token, err := jwt.Parse(tokenString, returnVerificationKey)
+	token, err := jwt.Parse(cookie["token"], returnVerificationKey)
 	if err != nil {
 		return 0, err
 	}

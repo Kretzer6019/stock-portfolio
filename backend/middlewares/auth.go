@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"dependencies/cookies"
+	"dependencies/auth"
 	"log"
 	"net/http"
 
@@ -10,7 +10,7 @@ import (
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, err := cookies.ReadCookies(c)
+		err := auth.ValidateToken(c)
 		if err != nil {
 			log.Println("Error:", err)
 			c.AbortWithStatus(http.StatusUnprocessableEntity)
