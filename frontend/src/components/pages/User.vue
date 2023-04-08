@@ -92,28 +92,22 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent } from 'vue'
-  import axios, { AxiosError, AxiosResponse } from "axios";
+  import { defineComponent, inject } from 'vue';
+  import { GlobalVariables } from '../../globals/variables';
+
+  import { AxiosError, AxiosResponse } from "axios";
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-
-  const api = axios.create({
-    baseURL: 'http://localhost:8080',
-    withCredentials: true,
-  });
-
-  api.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response && error.response.status === 422) {
-      // Perform permanent action, such as redirecting to a login page
-      window.location.replace('/login');
-    }
-    return Promise.reject(error);
-  }
-);
   
   export default defineComponent({
+    setup() {
+      const globalVars = inject<GlobalVariables>('globalVariables')!;
+      const api = globalVars.api;
+      
+      return {
+        api
+      }
+    },
     components: { 
       Disclosure, 
       DisclosureButton, 
@@ -149,7 +143,7 @@
     },
     methods: {
       getData() {
-        api
+        this.api
           .get("/")
           .then((response: AxiosResponse) => {
             console.log(response.data);
