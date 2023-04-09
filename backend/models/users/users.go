@@ -1,7 +1,7 @@
 package users
 
 import (
-	"dependencies/db"
+	"dependencies/clients/db"
 	"time"
 )
 

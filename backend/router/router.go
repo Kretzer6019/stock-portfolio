@@ -1,7 +1,7 @@
 package router
 
 import (
-	"dependencies/db"
+	"dependencies/clients/db"
 	"dependencies/middlewares"
 
 	"github.com/gin-gonic/gin"
