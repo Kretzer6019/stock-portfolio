@@ -1,22 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Index from '../components/pages/Index.vue'
-import User from '../components/pages/User.vue'
+
+import pageRoutes from '../components/router'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/login'
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Index
-  },
-  {
-    path: '/usuario',
-    name: 'Usuario',
-    component: User
-  }
+  ...pageRoutes
 ]
 
 const router = createRouter({

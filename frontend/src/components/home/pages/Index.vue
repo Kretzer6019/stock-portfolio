@@ -44,10 +44,9 @@
 </template>
   
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
-import { GlobalVariables } from '../../globals/variables';
+import { defineComponent } from 'vue';
 
-import { AxiosError, AxiosResponse } from "axios";
+import type {AxiosResponse, AxiosError} from 'axios'
 
 interface request {
   email: string,
@@ -55,14 +54,6 @@ interface request {
 }
 
 export default defineComponent({
-  setup() {
-    const globalVars = inject<GlobalVariables>('globalVariables')!;
-    const api = globalVars.api;
-
-    return {
-      api
-    }
-  },
   data() {
     return {
       create: false,
@@ -78,7 +69,7 @@ export default defineComponent({
       }
 
       if (create) {
-        this.api
+        this.$axios
           .post("/criar-conta", request)
           .then((response: AxiosResponse) => {
             if (response.status == 200) console.log(response.data);
@@ -87,7 +78,7 @@ export default defineComponent({
             console.log(error);
           })
       } else {
-        this.api
+        this.$axios
           .post("/login", request)
           .then((response: AxiosResponse) => {
             window.location.pathname = "/usuario";

@@ -7,9 +7,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { AxiosKey, injectStrict } from './http/symbols'
+import type {AxiosInstance, AxiosResponse, AxiosError} from 'axios'
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $axios: AxiosInstance
+    catTags: string[]
+  }
+}
 
-const http = injectStrict(AxiosKey)
 export default defineComponent({
   data() {
     return {

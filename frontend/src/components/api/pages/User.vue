@@ -108,10 +108,10 @@
 </template>
   
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
-import { GlobalVariables } from '../../globals/variables';
+import { defineComponent } from 'vue';
 
-import { AxiosError, AxiosResponse } from "axios";
+import type {AxiosResponse, AxiosError} from 'axios'
+
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -122,14 +122,6 @@ interface navigation {
 }
 
 export default defineComponent({
-  setup() {
-    const globalVars = inject<GlobalVariables>('globalVariables')!;
-    const api = globalVars.api;
-
-    return {
-      api
-    }
-  },
   components: {
     Disclosure,
     DisclosureButton,
@@ -165,7 +157,7 @@ export default defineComponent({
   },
   methods: {
     getData() {
-      this.api
+      this.$axios
         .get("/")
         .then((response: AxiosResponse) => {
           console.log(response.data);
@@ -175,7 +167,7 @@ export default defineComponent({
         })
     },
     signOut() {
-      this.api
+      this.$axios
         .get("/logout")
         .then((response: AxiosResponse) => {
           console.log(response.data);
