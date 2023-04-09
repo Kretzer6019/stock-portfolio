@@ -12,10 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const tokenExpireDays = 7
+
 func CreateToken(userID int) (string, error) {
 	permissions := jwt.MapClaims{}
 	permissions["authorized"] = true
-	permissions["exp"] = time.Now().Add(time.Hour * 6).Unix()
+	permissions["exp"] = time.Now().Add(tokenExpireDays * time.Hour * 24).Unix()
 	permissions["userID"] = userID
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissions)

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -98,4 +99,33 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, nil)
+}
+
+func Logout(c *gin.Context) {
+	// Extract user ID from cookie
+	userID, err := auth.ExtractUserID(c)
+	if err != nil {
+		log.Println("Error:", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	// Connect to db
+	db := c.MustGet("db").(*gorm.DB)
+	// Check if user exists
+	_, err = users.SelectUser(int(userID), db)
+	if err != nil {
+		log.Println("Error:", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	// Clean cookie
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:    "Authorization",
+		Value:   "",
+		Path:    "/",
+		MaxAge:  -1,
+		Expires: time.Unix(0, 0),
+	})
+
+	c.JSON(http.StatusUnprocessableEntity, nil)
 }

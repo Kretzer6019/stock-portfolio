@@ -13,4 +13,9 @@ var apiRoutes = gin.RoutesInfo{
 		Path:        "/",
 		HandlerFunc: users.GetUser,
 	},
+	{
+		Method:      http.MethodGet,
+		Path:        "/logout",
+		HandlerFunc: users.Logout,
+	},
 }
