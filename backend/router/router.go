@@ -9,9 +9,9 @@ import (
 
 func Generate() *gin.Engine {
 	r := gin.Default()
-	database := db.Init()
+	db.Init()
 	r.Use(middlewares.CorsMiddleware())
-	r.Use(middlewares.DatabaseMiddleware(database))
+	r.Use(middlewares.DatabaseMiddleware(db.DB))
 	return configRouter(r)
 }
 

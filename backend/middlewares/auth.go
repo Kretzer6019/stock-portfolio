@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 func Auth() gin.HandlerFunc {
@@ -18,10 +17,8 @@ func Auth() gin.HandlerFunc {
 			c.AbortWithStatus(http.StatusUnprocessableEntity)
 			return
 		}
-		// Connect to db
-		db := c.MustGet("db").(*gorm.DB)
 		// Check if user exists
-		_, err = users.SelectUser(int(userID), db)
+		_, err = users.SelectUser(int(userID))
 		if err != nil {
 			log.Println("Error:", err)
 			c.AbortWithStatus(http.StatusUnprocessableEntity)

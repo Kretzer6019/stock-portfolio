@@ -1,9 +1,8 @@
 package users
 
 import (
+	"dependencies/db"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type User struct {
@@ -13,27 +12,27 @@ type User struct {
 	DateCreated time.Time `gorm:"date_created,omitempty"`
 }
 
-func SelectUser(id int, db *gorm.DB) (User, error) {
+func SelectUser(id int) (User, error) {
 	var user User
-	err := db.First(&user, "id = ?", id).Error
+	err := db.DB.First(&user, "id = ?", id).Error
 
 	return user, err
 }
 
-func SelectUserByEmail(email string, db *gorm.DB) (User, error) {
+func SelectUserByEmail(email string) (User, error) {
 	var user User
-	err := db.First(&user, "email = ?", email).Error
+	err := db.DB.First(&user, "email = ?", email).Error
 
 	return user, err
 }
 
-func InsertUser(email string, password string, db *gorm.DB) (int, error) {
+func InsertUser(email string, password string) (int, error) {
 	user := User{
 		Email:    email,
 		Password: password,
 	}
 
-	result := db.Select("email", "password").Create(&user)
+	result := db.DB.Select("email", "password").Create(&user)
 
 	return user.ID, result.Error
 }

@@ -9,8 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 // s
-func Init() *gorm.DB {
+func Init() {
 	dbURL := fmt.Sprintf("postgres://%s:%s@db:%s/%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -22,5 +24,5 @@ func Init() *gorm.DB {
 		log.Fatalln(err)
 	}
 
-	return db
+	DB = db
 }

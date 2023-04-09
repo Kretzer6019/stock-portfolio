@@ -11,7 +11,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 func GetUser(c *gin.Context) {
@@ -42,9 +41,7 @@ func CreateAccount(c *gin.Context) {
 		return
 	}
 
-	db := c.MustGet("db").(*gorm.DB)
-
-	id, err := users.InsertUser(request.Email, string(hashedPassword), db)
+	id, err := users.InsertUser(request.Email, string(hashedPassword))
 	if err != nil {
 		log.Println("Error:", err)
 		c.JSON(http.StatusInternalServerError, err)
@@ -68,9 +65,7 @@ func Login(c *gin.Context) {
 	var request LoginRequest
 	c.ShouldBindJSON(&request)
 
-	db := c.MustGet("db").(*gorm.DB)
-
-	user, err := users.SelectUserByEmail(request.Email, db)
+	user, err := users.SelectUserByEmail(request.Email)
 	if err != nil {
 		log.Println("Error:", err)
 		c.JSON(http.StatusInternalServerError, err)
@@ -109,10 +104,8 @@ func Logout(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	// Connect to db
-	db := c.MustGet("db").(*gorm.DB)
 	// Check if user exists
-	_, err = users.SelectUser(int(userID), db)
+	_, err = users.SelectUser(int(userID))
 	if err != nil {
 		log.Println("Error:", err)
 		c.JSON(http.StatusInternalServerError, err)
