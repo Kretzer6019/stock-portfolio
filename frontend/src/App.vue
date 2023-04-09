@@ -6,18 +6,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { globalVariables, GlobalVariables } from './globals/variables';
 
+import { AxiosKey, injectStrict } from './http/symbols'
+
+const http = injectStrict(AxiosKey)
 export default defineComponent({
   data() {
     return {
     }
   },
-  provide() {
-    return {
-      globalVariables: globalVariables as GlobalVariables
-    };
-  }
 })
 </script>
 

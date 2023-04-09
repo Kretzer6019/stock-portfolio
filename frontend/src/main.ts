@@ -1,13 +1,15 @@
 import './style.css'
 import { createApp } from 'vue'
-import { globalVariables, GlobalVariables } from './globals/variables'
 import App from './App.vue'
 import router from './router'
+// http
+import http from './http/index'
+import { AxiosKey } from './http/symbols'
 
 const app = createApp(App)
 
 app.use(router)
 
-app.provide('globalVariables', globalVariables as GlobalVariables)
+app.provide(AxiosKey, http)
 
 app.mount('#app')
